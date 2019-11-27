@@ -7,6 +7,7 @@ function Class:new() end
 --create new Class type from base class
 function Class:derive(type)
     local cls = {}
+    cls["__call"] = Class.__call
     cls.type = type
     cls.__index = cls
     cls.super = self
@@ -30,12 +31,5 @@ end
 
 --Creating a class "Player"
 local Player = Class:derive("Player")
-
---Creating a new function in class "Player"
-function Player:new(name)
-end
-
---Creating instance of "Player"
-local plyr1 = Player()
 
 return Class
