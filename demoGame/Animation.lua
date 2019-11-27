@@ -1,3 +1,4 @@
+--creating a class Animation and importing other classes
 local class = require("class")
 local Vector2 = require("Vector2")
 local Anim = class:derive("Animation")
@@ -14,17 +15,21 @@ function Anim:new(xoffset, yoffset, w, h, column_size, num_frames, fps)
     self.size = Vector2(w,h)
 end
 
+--resetting animation
 function Anim:reset()
     self.timer = 1 / self.fps
     self.frame = 1
 end
 
+--setting the quad
 function Anim:set(quad)
     quad:setViewport(self.offset.x, self.offset.y, self.size.x, self.size.y)
 end
 
+--updating the animation
 function Anim:update(dt, quad)
-    if(self.num_frames <= 1) then return end
+    if self.num_frames <= 1  then return end
+
     self.timer = self.timer - dt
     if self.timer <= 0 then
         self.timer = 1 / self.fps
@@ -33,7 +38,7 @@ function Anim:update(dt, quad)
             self.frame = 1
         end
         self.offset.x = self.start_offset.x + (self.size.x * ((self.frame - 1) % (self.column_size)))
-        self.offset.y = self.start_offset.y + (self.size.y * math.floor((self.frame-1) / self.column_size))
+        self.offset.y = self.start_offset.y + (self.size.y * math.floor((self.frame - 1) / self.column_size))
         self:set(quad)
     end
 end
