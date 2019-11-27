@@ -1,3 +1,4 @@
+--Class to handle paired datas eg. size has x and y
 local class = require("class")
 local Vec2 = class:derive("Vector2")
 
