@@ -1,5 +1,6 @@
 local Anim = require("Animation")
 local Sprite = require("Sprite")
+local Key = require("Keyboard")
 
 local hero_atlas
 local angle = 0
@@ -13,28 +14,23 @@ local xoffset
 -----------------------
 
 local spr 
-local walk = Anim(6, 32, 32, 32, 4, 4, 12)
-local jump = Anim(134, 32, 32, 32, 4, 4, 12)
-local hit = Anim(262, 32, 32, 32, 4, 4, 12, false)
-local climb = Anim(582, 32, 32, 32, 3, 3, 12)
+local idle = Anim(16, 16, 16, 16, 4, 4, 6 )
+local walk = Anim(16, 32, 16, 16, 6, 6, 12)
+local swim = Anim(16, 64, 16, 16, 6, 6, 12)
+local hit = Anim(16, 80, 16, 16, 3, 3, 10, false)
 local sound = love.audio.newSource("Assets/Music/punch.mp3", "static")
 
 --function the gets carried out when love.exe is loaded
 function love.load()
-
+    Key:hook_love_events()
     love.graphics.setDefaultFilter('nearest', 'nearest')
-    hero_atlas = love.graphics.newImage("Assets/Sprites/characters.png")
-    spr = Sprite(hero_atlas, 32, 32, 100, 100, 5, 5, 0)
+    hero_atlas = love.graphics.newImage("Assets/Sprites/hero.png")
+    spr = Sprite(hero_atlas, 16, 16, 100, 100, 5, 5, 0)
     spr:add_animation("walk", walk)
-    spr:add_animation("jump", jump)
+    spr:add_animation("idle", idle)
     spr:add_animation("hit", hit)
-    spr:add_animation("climb", climb)
+    spr:add_animation("swim", swim)
     spr:animate("walk")
-    -- spr:animate("punch")
-    -- spr:animate("jump")
-    -- spr:animate("hit")
-    -- spr:animate("climb")
-
 
 end
 
@@ -42,10 +38,22 @@ end
 function love.update(dt)
     if dt >0.035 then return end
     
+    if Key:key_down("space") and spr.current_anim ~= "hit" then
+        spr:animate("hit")
+        love.audio.stop(sound)
+        love.audio.play(sound)
+    elseif Key:key_down("a") then
+        spr:flip_h(true)
+    elseif Key:key_down("d") then
+        spr:flip_h(false)
+    elseif Key:key_down("escape") then
+        love.event.quit()
+    end
     if spr.current_anim == "hit" and spr:animation_finished() then
         spr:animate("walk")
     end
     
+    Key:update(dt)
     spr:update(dt)
 end 
 
@@ -55,12 +63,7 @@ function love.draw()
     spr:draw()
 end
 
-function love.keypressed(key, scancode, isrepeat)
-    if key == "space" and spr.current_anim ~= "punch" then 
-        spr:animate("hit")
-        love.audio.stop(sound)
-        love.audio.play(sound)
-    end
-end
 
 
+
+ 

@@ -9,6 +9,7 @@ local Vector2 = require("Vector2")
 function Sprite:new(atlas, w, h, x, y, sx, sy, angle)
     self.w = w
     self.h = h
+    self.flip = Vector2(1,1)
     self.pos = Vector2(x or 0, y or 0)
     self.scale = Vector2(sx or 1, sy or 1)
     self.atlas = atlas
@@ -27,6 +28,24 @@ function Sprite:animate(anim_name)
     end
 end
 
+--function to flip the animation horizontally
+function Sprite:flip_h(flip)
+   if flip then
+        self.flip.x = -1
+   else
+        self.flip.x = 1
+   end 
+end
+
+--function to flip the animation vertically
+function Sprite:flip_v(flip)
+    if flip then
+         self.flip.y = -1
+    else
+         self.flip.y = 1
+    end 
+ end
+--checks if animation is finished
 function Sprite:animation_finished()
     if self.animations[self.current_anim] ~= nil then
         return self.animations[self.current_anim].done
@@ -48,7 +67,7 @@ end
 
 --function to draw the sprite
 function Sprite:draw()
-    love.graphics.draw(self.atlas, self.quad, self.pos.x, self.pos.y, self.angle, self.scale.x, self.scale.y, self.w / 2, self.h / 2)
+    love.graphics.draw(self.atlas, self.quad, self.pos.x, self.pos.y, self.angle, self.scale.x * self.flip.x , self.scale.y * self.flip.y, self.w / 2, self.h / 2)
 end
 
 
