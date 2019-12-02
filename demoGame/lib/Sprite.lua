@@ -1,8 +1,8 @@
 --creating a class Sprite and importing other classes
-local class = require("class")
-local Sprite = class:derive("Sprite")
-local Anim = require("Animation")
-local Vector2 = require("Vector2")
+local class = require("lib.Class")
+local Sprite = class:derive("lib.Sprite")
+local Anim = require("lib.Animation")
+local Vector2 = require("lib.Vector2")
 
 
 --constructor for sprite class

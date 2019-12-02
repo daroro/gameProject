@@ -1,8 +1,8 @@
 -- module to invoke an event and have multiple response
 -- key = event type, value = functions 
 
-local class = require("Class")
-local Events = class:derive("Events")
+local class = require("lib.Class")
+local Events = class:derive("lib.Events")
 
 -- constructor
 function Events:new(event_must_exist)

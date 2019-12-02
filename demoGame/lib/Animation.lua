@@ -1,7 +1,7 @@
 --creating a class Animation and importing other classes
-local class = require("class")
-local Vector2 = require("Vector2")
-local Anim = class:derive("Animation")
+local class = require("lib.Class")
+local Vector2 = require("lib.Vector2")
+local Anim = class:derive("lib.Animation")
 
 --constructor 
 function Anim:new(xoffset, yoffset, w, h, frames, column_size, fps, loop)
