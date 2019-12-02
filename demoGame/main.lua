@@ -1,6 +1,7 @@
 local Anim = require("Animation")
 local Sprite = require("Sprite")
 local Key = require("Keyboard")
+local Evt = require("Events")
 
 local hero_atlas
 local angle = 0
@@ -19,6 +20,7 @@ local walk = Anim(16, 32, 16, 16, 6, 6, 12)
 local swim = Anim(16, 64, 16, 16, 6, 6, 12)
 local hit = Anim(16, 80, 16, 16, 3, 3, 10, false)
 local sound = love.audio.newSource("Assets/Music/punch.mp3", "static")
+local e
 
 --function the gets carried out when love.exe is loaded
 function love.load()
@@ -31,7 +33,14 @@ function love.load()
     spr:add_animation("hit", hit)
     spr:add_animation("swim", swim)
     spr:animate("walk")
+    e = Evt()
+    e:add('on_space')
+    e:hook('on_space', on_space)
 
+end
+
+function on_space()
+    print("Spaced!")
 end
 
 --function that gets carried out every x milliseconds.
@@ -42,6 +51,9 @@ function love.update(dt)
         spr:animate("hit")
         love.audio.stop(sound)
         love.audio.play(sound)
+        e:invoke('on_space')
+    elseif Key:key_down("u") then
+        e:unhook("on_space", on_space)
     elseif Key:key_down("a") then
         spr:flip_h(true)
     elseif Key:key_down("d") then
